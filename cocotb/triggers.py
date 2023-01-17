@@ -186,8 +186,8 @@ class Timer(GPITrigger):
 
            units: One of
                ``'step'``, ``'fs'``, ``'ps'``, ``'ns'``, ``'us'``, ``'ms'``, ``'sec'``.
-               When *units* is ``'step'``,
-               the timestep is determined by the simulator (see :make:var:`COCOTB_HDL_TIMEPRECISION`).
+               When *units* is ``'timeunit'`` or ``'step'``,
+               the timestep is determined by the simulator (see :make:var:`COCOTB_HDL_TIMEUNIT` and :make:var:`COCOTB_HDL_TIMEPRECISION`).
 
         Examples:
 
@@ -213,6 +213,11 @@ class Timer(GPITrigger):
             These are most useful when using computed durations while
             avoiding floating point inaccuracies.
 
+            The following will match a default Verilog delay of `#100`,
+            irrespective of the prevailing simulator time unit/precision:
+
+            >>> await Timer(100, units='timeunit')
+
         See Also:
             :func:`~cocotb.utils.get_sim_steps`
 
@@ -231,6 +236,10 @@ class Timer(GPITrigger):
 
         .. versionchanged:: 1.6
             Support rounding modes.
+
+        .. versionchanged:: 1.8
+            Support ``'timeunit'`` as the *units* argument to mean "simulator time unit".
+
         """
         GPITrigger.__init__(self)
         if time_ps is not None:

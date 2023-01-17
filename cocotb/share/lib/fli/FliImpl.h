@@ -415,6 +415,7 @@ class FliImpl : public GpiImplInterface {
     void sim_end() override;
     void get_sim_time(uint32_t *high, uint32_t *low) override;
     void get_sim_precision(int32_t *precision) override;
+    void get_sim_timeunit(int32_t *precision) override;
     const char *get_simulator_product() override;
     const char *get_simulator_version() override;
 

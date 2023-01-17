@@ -483,6 +483,11 @@ void FliImpl::get_sim_precision(int32_t *precision) {
     *precision = mti_GetResolutionLimit();
 }
 
+void FliImpl::get_sim_timeunit(int32_t *timeunit) {
+    // FIXME: perhaps mti_Delta(), but no way to test
+    *timeunit = 0;
+}
+
 const char *FliImpl::get_simulator_product() {
     if (m_product.empty() && m_version.empty()) {
         const std::string info =

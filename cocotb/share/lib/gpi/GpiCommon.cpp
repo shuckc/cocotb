@@ -222,6 +222,18 @@ void gpi_get_sim_precision(int32_t *precision) {
     *precision = val;
 }
 
+
+void gpi_get_sim_timeunit(int32_t *timeunit) {
+    /* We clamp to sensible values here, 1e-15 min and 1e3 max */
+    int32_t val;
+    registered_impls[0]->get_sim_timeunit(&val);
+    if (val > 2) val = 2;
+
+    if (val < -15) val = -15;
+
+    *timeunit = val;
+}
+
 const char *gpi_get_simulator_product() {
     return registered_impls[0]->get_simulator_product();
 }

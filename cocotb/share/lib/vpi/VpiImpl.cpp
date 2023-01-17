@@ -71,6 +71,12 @@ void VpiImpl::get_sim_precision(int32_t *precision) {
     *precision = vpi_get(vpiTimePrecision, NULL);
 }
 
+void VpiImpl::get_sim_timeunit(int32_t *timeunit) {
+    // Icarus only legally fetches the timeunit from a vpi_handle
+    // when passed NULL it unhelpfully returns the precision
+    *timeunit = vpi_get(vpiTimeUnit, NULL);
+}
+
 const char *VpiImpl::get_simulator_product() {
     if (m_product.empty() && m_version.empty()) {
         s_vpi_vlog_info info;

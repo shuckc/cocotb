@@ -50,6 +50,13 @@ def _get_simulator_precision():
     _get_simulator_precision = precision.__int__
     return _get_simulator_precision()
 
+def _get_simulator_timeunit():
+    # cache and replace this function
+    timeunit = simulator.get_timeunit()
+    global _get_simulator_timeunit
+    _get_simulator_timeunit = timeunit.__int__
+    return _get_simulator_timeunit()
+
 
 def get_python_integer_types():
     warnings.warn(
@@ -151,7 +158,10 @@ def get_sim_steps(
     .. versionchanged:: 1.6
         Support rounding modes.
     """
-    if units not in (None, "step"):
+    if units == "timeunit":
+        result = _ldexp10(time, -_get_simulator_timeunit())
+        print(f'{time} {units} with precision {_get_simulator_precision()} timeunit {_get_simulator_timeunit()} becomes delay {result}')
+    elif units not in (None, "step"):
         result = _ldexp10(time, _get_log_time_scale(units) - _get_simulator_precision())
     else:
         result = time
@@ -178,7 +188,6 @@ def get_sim_steps(
         result_rounded = math.floor(result)
     else:
         raise ValueError(f"Invalid round_mode specifier: {round_mode}")
-
     return result_rounded
 
 

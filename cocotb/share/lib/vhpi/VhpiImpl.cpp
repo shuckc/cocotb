@@ -110,6 +110,13 @@ void VhpiImpl::get_sim_precision(int32_t *precision) {
     *precision = log10int(femtoseconds) - 15;
 }
 
+void VhpiImpl::get_sim_timeunit(int32_t *timeunit) {
+    /* The value returned is in number of femtoseconds */
+    vhpiPhysT prec = vhpi_get_phys(vhpiSimTimeUnitP, NULL);
+    uint64_t femtoseconds = ((uint64_t)prec.high << 32) | prec.low;
+    *timeunit = log10int(femtoseconds) - 15;
+}
+
 const char *VhpiImpl::get_simulator_product() {
     if (m_product.empty()) {
         vhpiHandleT tool = vhpi_handle(vhpiTool, NULL);

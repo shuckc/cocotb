@@ -786,6 +786,23 @@ static PyObject *get_precision(PyObject *, PyObject *) {
     return PyLong_FromLong(precision);
 }
 
+static PyObject *get_timeunit(PyObject *, PyObject *) {
+    if (!gpi_has_registered_impl()) {
+        char const *msg =
+            "Simulator is not available! Defaulting timeunit to 1 fs.";
+        if (PyErr_WarnEx(PyExc_RuntimeWarning, msg, 1) < 0) {
+            return NULL;
+        }
+        return PyLong_FromLong(-15);  // preserves old behavior
+    }
+
+    int32_t timeunit;
+
+    gpi_get_sim_timeunit(&timeunit);
+
+    return PyLong_FromLong(timeunit);
+}
+
 static PyObject *get_simulator_product(PyObject *, PyObject *) {
     if (!gpi_has_registered_impl()) {
         PyErr_SetString(PyExc_RuntimeError, "No simulator available!");
@@ -989,6 +1006,14 @@ static PyMethodDef SimulatorMethods[] = {
                "\n"
                "For example, if ``-12`` is returned, the simulator's time "
                "precision is 10**-12 or 1 ps.")},
+    {"get_timeunit", get_timeunit, METH_NOARGS,
+     PyDoc_STR("get_timeunit()\n"
+               "--\n\n"
+               "get_timeunit() -> int\n"
+               "Get the timeunit of the simulator in powers of 10.\n"
+               "\n"
+               "For example, if ``-12`` is returned, the simulator's time "
+               "unit is 10**-12 or 1 ps.")},
     {"get_simulator_product", get_simulator_product, METH_NOARGS,
      PyDoc_STR("get_simulator_product()\n"
                "--\n\n"
